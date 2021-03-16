@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import liff from '@line/liff'
 
 export default Vue.extend({
   data() {
@@ -36,9 +35,21 @@ export default Vue.extend({
     }
   },
   async mounted() {
-    await liff.init({ liffId: ''})
-    liff.login({ redirectUri: "https://cheriee.jp" })
-}
+    await this.$liff
+    .init({
+        liffId: 'LIFF_ID'
+    })
+    .then(async () => {
+        if (!this.$liff.isLoggedIn()) {
+            this.$liff.login();
+        } else {
+            
+        }
+    })
+    .catch((err) => {
+        console.log(err.code, err.message);
+    });
+  }
 })
 </script>
 
