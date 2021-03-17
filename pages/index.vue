@@ -21,6 +21,7 @@
           GitHub
         </a>
       </div>
+      <p style="word-break: break-word; margin-top: 2rem">{{ token$ }}</p>
     </div>
   </div>
 </template>
@@ -34,10 +35,15 @@ export default Vue.extend({
 
     }
   },
+  computed: {
+    token$: function() { 
+      return this.$liff.getIDToken() 
+    }
+  },
   async mounted() {
     await this.$liff
     .init({
-        liffId: 'LIFF_ID'
+        liffId: process.env.LIFF_ID || ''
     })
     .then(async () => {
         if (!this.$liff.isLoggedIn()) {
