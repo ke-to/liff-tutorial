@@ -3,6 +3,7 @@
     <div>
       <Logo />
       <h1 class="title">liff-tutorial</h1>
+      <p>{{ liffId }}</p>
       <div class="links">
         <a
           href="https://nuxtjs.org/"
@@ -21,7 +22,7 @@
           GitHub
         </a>
       </div>
-      <p style="word-break: break-word; margin-top: 2rem">{{ token$ }}</p>
+      <p style="word-break: break-word; margin-top: 2rem">{{ token }}</p>
     </div>
   </div>
 </template>
@@ -32,24 +33,25 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-
+      liffId: process.env.LIFF_ID || '',
+      token: ''
     }
   },
   computed: {
     token$: function() { 
-      return this.$liff.getIDToken() 
+      return ''
     }
   },
   async mounted() {
     await this.$liff
     .init({
-        liffId: process.env.LIFF_ID || ''
+        liffId: this.liffId
     })
     .then(async () => {
         if (!this.$liff.isLoggedIn()) {
             this.$liff.login();
         } else {
-            
+            this.token = this.$liff.getIDToken() || ''
         }
     })
     .catch((err) => {
